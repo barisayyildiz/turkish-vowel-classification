@@ -16,6 +16,8 @@ import numpy as np
 
 from utils import audio_to_spec
 
+import os
+
 
 class Item(BaseModel):
 	name: str
@@ -46,16 +48,19 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.post("/analyze")
 async def anaylze_sound(sound: UploadFile = File()):
+	print(sound)
 	content_sound = await sound.read()
 	print(sound.filename)
 	return {"Hello": "World"}
 
 @app.post("/save_upload_file_tmp")
 def save_upload_file_tmp(file: UploadFile) -> Path:
-	with open(f'{file.filename}', "wb") as buffer:
+	root_dir = "audios"
+	path = os.path.join(root_dir, file.filename)
+	with open(path, "wb") as buffer:
 		shutil.copyfileobj(file.file, buffer)
 
-	audio_to_spec(file.filename)
+	audio_to_spec(path)
 	
 	return {"file_name":file.filename}
 
@@ -79,4 +84,8 @@ async def create_item(item: Item):
 		price_with_tax = item.price + item.tax
 		item_dict.update({"price_with_tax": price_with_tax})
 	return item_dict
+
+
+files = [i for i in os.listdir() if os.path.isfile(i)]
+print(files)
 

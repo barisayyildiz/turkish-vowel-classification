@@ -3,8 +3,10 @@ import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
 
-def audio_to_spec(file_name:str):
-	y, sr = librosa.load(file_name)
+def audio_to_spec(path: str):
+	file_name = path.split("/")[-1]
+
+	y, sr = librosa.load(path)
 	S = librosa.feature.melspectrogram(y=y, sr=sr)
 
 	cmap = plt.get_cmap('inferno')
