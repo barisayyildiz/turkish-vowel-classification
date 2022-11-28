@@ -17,7 +17,7 @@ import numpy as np
 from utils import audio_to_spec
 
 import os
-
+import uuid
 
 class Item(BaseModel):
 	name: str
@@ -48,9 +48,26 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.post("/analyze")
 async def anaylze_sound(sound: UploadFile = File()):
-	print(sound)
+	# print(sound)
 	content_sound = await sound.read()
+	print(sound)
+	print(sound.content_type)
+	print(type(content_sound))
+	print(len(content_sound))
 	print(sound.filename)
+
+	print(sound.file)
+
+	rnd_id = str(uuid.uuid4()) + ".wav"
+
+	root_dir = "audios"
+	path = os.path.join(root_dir, rnd_id)
+	# print(path)
+
+	with open(path, mode="wb") as f:
+		f.write(content_sound)
+	audio_to_spec(path)
+
 	return {"Hello": "World"}
 
 @app.post("/save_upload_file_tmp")
