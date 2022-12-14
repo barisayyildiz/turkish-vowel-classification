@@ -72,7 +72,7 @@ def predict_spec():
 	test_generator_spec = spec_datagen_test.flow_from_directory(path_spec_test,class_mode='categorical',color_mode ='rgb',shuffle = False,  target_size =(h,w),subset='training')
 	test_spec_data,test_labels_spec = load_data_from_generators(test_generator_spec,timestep=1,color_mode='rgb')
 
-	vowels = ["a", "e", "ii", "i", "o", "oo", "u", "uu"]
+	vowels = ["a", "e", "ı", "i", "o", "ö", "u", "ü"]
 	prediction = model_s.predict(test_spec_data)[0]
 
 	print(model_s.predict(test_spec_data))
