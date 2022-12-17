@@ -58,19 +58,6 @@ def load_data_from_generators(generator,timestep,color_mode ='grayscale',target_
 
 
 def predict_spec(model_s):
-	start_time = time.time()
-
-	# filename ="vowels_spec_model"
-	# model_s = get_loaded_model_by_name(filename)
-	# opt = SGD(lr=0.001)
-	# model_s.compile(loss = "categorical_crossentropy", optimizer =opt,metrics=['accuracy'], run_eagerly=True)
-
-	# print("--- %s seconds to compile ---" % (time.time() - start_time))
-
-	# spec_datagen = ImageDataGenerator()
-
-	# print("--- %s seconds to ImageDataGenerator ---" % (time.time() - start_time))
-	
 	h = 96
 	w = 96
 
@@ -80,22 +67,15 @@ def predict_spec(model_s):
 	test_generator_spec = spec_datagen_test.flow_from_directory(path_spec_test,class_mode='categorical',color_mode ='rgb',shuffle = False,  target_size =(h,w),subset='training')
 	test_spec_data,test_labels_spec = load_data_from_generators(test_generator_spec,timestep=1,color_mode='rgb')
 
-	print("--- %s seconds to 3rd check---" % (time.time() - start_time))
-
 	vowels = ["a", "e", "ı", "i", "o", "ö", "u", "ü"]
 	prediction = model_s.predict(test_spec_data)[0]
 
-	print("--- %s seconds to predict ---" % (time.time() - start_time))
-
-	# print(model_s.predict(test_spec_data))
-	# print(prediction)
-
-	# return res
 	return vowels[np.argmax(prediction)]
-	# return prediction
 
 
 
-def remove_file(id):
-	os.remove(f'audios/{id}.wav')
-	os.remove(f'specs/images/{id}.png')
+def remove_file():
+	for f in os.listdir('audios'):
+		os.remove(os.path.join('audios', f))
+	for f in os.listdir('specs/images'):
+		os.remove(os.path.join('specs/images', f))

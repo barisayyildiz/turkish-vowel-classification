@@ -6,6 +6,8 @@ from pydantic import BaseModel
 
 import time
 
+import io
+
 from tempfile import NamedTemporaryFile
 import shutil
 from pathlib import Path
@@ -61,47 +63,40 @@ def read_root():
 def read_item(item_id: int, q: Union[str, None] = None):
 	return {"item_id": item_id, "q": q}
 
+@app.post("/anaylze_test")
+def deal_with_sound_file(sound: bytes = File(...)):
+	file_bytes = io.BytesIO(sound)
+	print(file_bytes)
+	y, sr = librosa.load(file_bytes)
+
+	S = librosa.feature.melspectrogram(y=y, sr=sr)
+
+	cmap = plt.get_cmap('inferno')
+	plt.figure(figsize=(8,8))
+
+	plt.specgram(y, NFFT=2048, Fs=2, Fc=0, noverlap=128, cmap=cmap, sides='default', mode='default', scale='dB')
+	plt.savefig(f'specs/images/test_file_name.png')
+
+	return {"hello":"world"}
+
 @app.post("/analyze")
 async def anaylze_sound(sound: UploadFile = File()):
 	start_time = time.time()
 
-	# print(sound)
 	content_sound = await sound.read()
-	print(sound)
-	print(sound.content_type)
-	print(type(content_sound))
-	print(len(content_sound))
-	print(sound.filename)
-
-	print(sound.file)
 
 	rnd_id = str(uuid.uuid4())
-
 	root_dir = "audios"
 	path = os.path.join(root_dir, rnd_id + ".wav")
-	# print(path)
-
-	print("--- %s seconds ---" % (time.time() - start_time))
 
 	with open(path, mode="wb") as f:
 		f.write(content_sound)
 
-	print("--- %s seconds to write to a file ---" % (time.time() - start_time))
-
+	print(f'duration : {librosa.get_duration(filename=root_dir + "/" + rnd_id + ".wav")}')
 
 	audio_to_spec(path)
-
-	print("--- %s seconds audio -> spec ---" % (time.time() - start_time))
-
 	prediction = predict_spec(model_s)
-
-	start_time = time.time()
-
-	remove_file(rnd_id)
-
-	print("--- %s seconds to remove ---" % (time.time() - start_time))
-
-	print(name)
+	remove_file()
 
 	return {"vowel" : prediction}
 	# return {"Hello": "World"}
