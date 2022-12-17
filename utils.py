@@ -3,6 +3,8 @@ import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
 
+import time
+
 import os
 
 from tensorflow.keras.models import model_from_json
@@ -55,13 +57,19 @@ def load_data_from_generators(generator,timestep,color_mode ='grayscale',target_
 	return np.array(data_frames),np.array(dat_labels)
 
 
-def predict_spec():
-	filename ="vowels_spec_model"
-	model_s = get_loaded_model_by_name(filename)
-	opt = SGD(lr=0.001)
-	model_s.compile(loss = "categorical_crossentropy", optimizer =opt,metrics=['accuracy'], run_eagerly=True)
+def predict_spec(model_s):
+	start_time = time.time()
 
-	spec_datagen = ImageDataGenerator()
+	# filename ="vowels_spec_model"
+	# model_s = get_loaded_model_by_name(filename)
+	# opt = SGD(lr=0.001)
+	# model_s.compile(loss = "categorical_crossentropy", optimizer =opt,metrics=['accuracy'], run_eagerly=True)
+
+	# print("--- %s seconds to compile ---" % (time.time() - start_time))
+
+	# spec_datagen = ImageDataGenerator()
+
+	# print("--- %s seconds to ImageDataGenerator ---" % (time.time() - start_time))
 	
 	h = 96
 	w = 96
@@ -72,13 +80,19 @@ def predict_spec():
 	test_generator_spec = spec_datagen_test.flow_from_directory(path_spec_test,class_mode='categorical',color_mode ='rgb',shuffle = False,  target_size =(h,w),subset='training')
 	test_spec_data,test_labels_spec = load_data_from_generators(test_generator_spec,timestep=1,color_mode='rgb')
 
+	print("--- %s seconds to 3rd check---" % (time.time() - start_time))
+
 	vowels = ["a", "e", "ı", "i", "o", "ö", "u", "ü"]
 	prediction = model_s.predict(test_spec_data)[0]
 
-	print(model_s.predict(test_spec_data))
-	print(prediction)
+	print("--- %s seconds to predict ---" % (time.time() - start_time))
 
+	# print(model_s.predict(test_spec_data))
+	# print(prediction)
+
+	# return res
 	return vowels[np.argmax(prediction)]
+	# return prediction
 
 
 

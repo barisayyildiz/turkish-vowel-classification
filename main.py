@@ -4,6 +4,8 @@ from fastapi import FastAPI, Form, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+import time
+
 from tempfile import NamedTemporaryFile
 import shutil
 from pathlib import Path
@@ -19,8 +21,17 @@ from utils import audio_to_spec, get_loaded_model_by_name, load_data_from_genera
 import os
 import uuid
 
-# from tensorflow.keras.optimizers import SGD
-# from keras.preprocessing.image import ImageDataGenerator
+
+
+# ABOUT MODAL
+from tensorflow.keras.models import model_from_json
+from tensorflow.keras.optimizers import SGD
+import tensorflow as tf
+from keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.utils import img_to_array,load_img,array_to_img
+from keras.preprocessing.image import DirectoryIterator,DataFrameIterator
+
+
 
 
 class Item(BaseModel):
@@ -52,6 +63,8 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.post("/analyze")
 async def anaylze_sound(sound: UploadFile = File()):
+	start_time = time.time()
+
 	# print(sound)
 	content_sound = await sound.read()
 	print(sound)
@@ -68,14 +81,27 @@ async def anaylze_sound(sound: UploadFile = File()):
 	path = os.path.join(root_dir, rnd_id + ".wav")
 	# print(path)
 
+	print("--- %s seconds ---" % (time.time() - start_time))
+
 	with open(path, mode="wb") as f:
 		f.write(content_sound)
+
+	print("--- %s seconds to write to a file ---" % (time.time() - start_time))
+
+
 	audio_to_spec(path)
-	prediction = predict_spec()
+
+	print("--- %s seconds audio -> spec ---" % (time.time() - start_time))
+
+	prediction = predict_spec(model_s)
+
+	start_time = time.time()
 
 	remove_file(rnd_id)
 
+	print("--- %s seconds to remove ---" % (time.time() - start_time))
 
+	print(name)
 
 	return {"vowel" : prediction}
 	# return {"Hello": "World"}
@@ -102,24 +128,12 @@ async def create_item(item: Item):
 	return item_dict
 
 
-# def main():
-# 	filename ="vowels_spec_model"
-# 	model_s = get_loaded_model_by_name(filename)
-# 	opt = SGD(lr=0.001)
-# 	model_s.compile(loss = "categorical_crossentropy", optimizer =opt,metrics=['accuracy'], run_eagerly=True)
-
-# 	print(model_s)
-
-# 	################ Spectrogram images ##############
-# 	h = 96
-# 	w = 96
-
-# 	path_spec_test = "specs"
-# 	spec_datagen_test = ImageDataGenerator()
-
-# 	test_generator_spec = spec_datagen_test.flow_from_directory(path_spec_test,class_mode='categorical',color_mode ='rgb',shuffle = False,  target_size =(h,w),subset='training')
-# 	test_spec_data,test_labels_spec = load_data_from_generators(test_generator_spec,timestep=1,color_mode='rgb')
+name = "barış"
 
 
-# main()
+# INITIAL LOADS
+filename ="vowels_spec_model"
+model_s = get_loaded_model_by_name(filename)
+opt = SGD(lr=0.001)
+model_s.compile(loss = "categorical_crossentropy", optimizer =opt,metrics=['accuracy'], run_eagerly=True)
 
