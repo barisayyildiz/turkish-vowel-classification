@@ -56,6 +56,23 @@ def load_data_from_generators(generator,timestep,color_mode ='grayscale',target_
 
 	return np.array(data_frames),np.array(dat_labels)
 
+def predict_all(model_s):
+	h = 96
+	w = 96
+
+	path_spec_test = "specs"
+
+	spec_datagen_test = ImageDataGenerator()
+	test_generator_spec = spec_datagen_test.flow_from_directory(path_spec_test,class_mode='categorical',color_mode ='rgb',shuffle = False,  target_size =(h,w),subset='training')
+	test_spec_data,test_labels_spec = load_data_from_generators(test_generator_spec,timestep=1,color_mode='rgb')
+
+	vowels = ["a", "e", "ı", "i", "o", "ö", "u", "ü"]
+	predictions = model_s.predict(test_spec_data)
+
+	# for pred in predictions:
+	# 	print(vowels[np.argmax(pred)], max(pred))
+	return predictions
+
 
 def predict_spec(model_s):
 	h = 96
@@ -72,9 +89,11 @@ def predict_spec(model_s):
 
 	return vowels[np.argmax(prediction)]
 
+def remove_file(rnd_id):
+	os.remove(os.path.join("audios", str(rnd_id) + ".wav"))
+	os.remove(os.path.join("specs/images", str(rnd_id) + ".png"))
 
-
-def remove_file():
+def remove_all():
 	for f in os.listdir('audios'):
 		os.remove(os.path.join('audios', f))
 	for f in os.listdir('specs/images'):

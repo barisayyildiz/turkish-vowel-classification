@@ -14,16 +14,16 @@ from keras.preprocessing.image import DirectoryIterator,DataFrameIterator
 import numpy as np
 
 
-# chunk_name = "test_sound.wav"
-# y, sr = librosa.load(chunk_name)
-# S = librosa.feature.melspectrogram(y=y, sr=sr)
+chunk_name = "tests/a.wav"
+y, sr = librosa.load(chunk_name)
+S = librosa.feature.melspectrogram(y=y, sr=sr)
 
-# cmap = plt.get_cmap('inferno')
-# plt.figure(figsize=(8,8))
+cmap = plt.get_cmap('inferno')
+plt.figure(figsize=(8,8))
 
-# plt.specgram(y, NFFT=2048, Fs=2, Fc=0, noverlap=128, cmap=cmap, sides='default', mode='default', scale='dB')
-# plt.savefig(f'specs/images/spectogram.png')
-# plt.clf()
+plt.specgram(y, NFFT=2048, Fs=2, Fc=0, noverlap=128, cmap=cmap, sides='default', mode='default', scale='dB')
+plt.savefig(f'specs/images/spectogram.png')
+plt.clf()
 
 
 
@@ -93,9 +93,11 @@ print(test_spec_data.shape)
 vowels = ["a", "e", "ı", "i", "o", "ö", "u", "ü"]
 
 predictions = model_s.predict(test_spec_data)
-predictions = predictions[0]
+
 print(predictions)
-print(vowels[np.argmax(predictions)])
+
+for pred in predictions:
+	print(vowels[np.argmax(pred)])
 
 
 # # be careful if you run the training, do not run these lines
