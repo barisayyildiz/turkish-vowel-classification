@@ -67,11 +67,6 @@ app.add_middleware(
 def read_root():
 	return {"Hello": "World"}
 
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-	return {"item_id": item_id, "q": q}
-
 @app.post("/anaylze_test")
 def deal_with_sound_file(sound: bytes = File(...)):
 	file_bytes = io.BytesIO(sound)
@@ -185,18 +180,6 @@ async def anaylze_sound_parts(sound: UploadFile = File()):
 		remove_all()
 		return Response(content=response_wrapper, media_type="application/json")
 
-	# return {
-	# 	"result" : res
-	# }
-
-	# return {*res}
-
-	# return Response(content={"hello":"world"})
-
-	# json_compatible_item_data = jsonable_encoder(predictions)
-	# return JSONResponse(content=json_compatible_item_data)
-
-
 @app.post("/analyze-parts")
 async def anaylze_sound_parts(sound: UploadFile = File()):
 	content_sound = await sound.read()
@@ -278,24 +261,32 @@ async def anaylze_sound_parts(sound: UploadFile = File()):
 @app.post("/analyze")
 async def anaylze_sound(sound: UploadFile = File()):
 	start_time = time.time()
+	try:
+		content_sound = await sound.read()
 
-	content_sound = await sound.read()
+		rnd_id = str(uuid.uuid4())
+		root_dir = "audios"
+		path = os.path.join(root_dir, rnd_id + ".wav")
 
-	rnd_id = str(uuid.uuid4())
-	root_dir = "audios"
-	path = os.path.join(root_dir, rnd_id + ".wav")
+		with open(path, mode="wb") as f:
+			f.write(content_sound)
 
-	with open(path, mode="wb") as f:
-		f.write(content_sound)
+		print(f'duration : {librosa.get_duration(filename=root_dir + "/" + rnd_id + ".wav")}')
 
-	print(f'duration : {librosa.get_duration(filename=root_dir + "/" + rnd_id + ".wav")}')
-
-	audio_to_spec(path)
-	prediction = predict_spec(model_s)
-	# remove_all()
+		audio_to_spec(path)
+		prediction = predict_spec(model_s)
+		response_wrapper = prediction
+	except Exception as e:
+		response_wrapper = {
+			'msg':str(e)
+		}
+		pass
+	finally:
+		remove_all()
+		return Response(content=response_wrapper, media_type="application/json")
+		
 
 	return {"vowel" : prediction}
-	# return {"Hello": "World"}
 
 @app.post("/save_upload_file_tmp")
 def save_upload_file_tmp(file: UploadFile) -> Path:
@@ -307,17 +298,6 @@ def save_upload_file_tmp(file: UploadFile) -> Path:
 	audio_to_spec(path)
 	
 	return {"file_name":file.filename}
-
-
-@app.post("/items/")
-async def create_item(item: Item):
-	print(item)
-	item_dict = item.dict()
-	if item.tax:
-		price_with_tax = item.price + item.tax
-		item_dict.update({"price_with_tax": price_with_tax})
-	return item_dict
-
 
 name = "barış"
 
