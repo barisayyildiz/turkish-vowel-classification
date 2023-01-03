@@ -275,7 +275,9 @@ async def anaylze_sound(sound: UploadFile = File()):
 
 		audio_to_spec(path)
 		prediction = predict_spec(model_s)
-		response_wrapper = prediction
+		response_wrapper = {
+			"vowel" : prediction
+		}
 	except Exception as e:
 		response_wrapper = {
 			'msg':str(e)
@@ -284,9 +286,6 @@ async def anaylze_sound(sound: UploadFile = File()):
 	finally:
 		remove_all()
 		return Response(content=response_wrapper, media_type="application/json")
-		
-
-	return {"vowel" : prediction}
 
 @app.post("/save_upload_file_tmp")
 def save_upload_file_tmp(file: UploadFile) -> Path:
