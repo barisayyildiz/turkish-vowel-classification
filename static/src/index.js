@@ -5,7 +5,7 @@ import chart from "./chart.png";
 
 const btn = document.querySelector("#btn");
 
-const ENDPOINT = "analyze-parts-new";
+const ENDPOINT = "/analyze-parts-new";
 
 let recorder;
 let stream;

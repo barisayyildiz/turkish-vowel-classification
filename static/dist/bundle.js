@@ -989,7 +989,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 var btn = document.querySelector("#btn");
-var ENDPOINT = "analyze-parts-new";
+var ENDPOINT = "/analyze-parts-new";
 var recorder;
 var stream;
 var audio_context;
