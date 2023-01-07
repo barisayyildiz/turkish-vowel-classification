@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 import json
 
@@ -33,16 +34,12 @@ import soundfile as sf
 from scipy import stats
 
 
-
 # ABOUT MODAL
 from tensorflow.keras.models import model_from_json
 from tensorflow.keras.optimizers import SGD
-import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.utils import img_to_array,load_img,array_to_img
 from keras.preprocessing.image import DirectoryIterator,DataFrameIterator
-
-
 
 
 class Item(BaseModel):
@@ -54,6 +51,8 @@ class Item(BaseModel):
 origins = ["*"]
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.add_middleware(
 	CORSMiddleware,
@@ -285,7 +284,8 @@ async def anaylze_sound(sound: UploadFile = File()):
 		pass
 	finally:
 		remove_all()
-		return Response(content=response_wrapper, media_type="application/json")
+		return {"hello":"world"}
+		# return Response(content=response_wrapper, media_type="application/json")
 
 @app.post("/save_upload_file_tmp")
 def save_upload_file_tmp(file: UploadFile) -> Path:

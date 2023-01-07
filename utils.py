@@ -10,7 +10,6 @@ import os
 from tensorflow.keras.models import model_from_json
 from tensorflow.keras.optimizers import SGD
 
-import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 # from keras.preprocessing.image import array_to_img, img_to_array, load_img
 from tensorflow.keras.utils import img_to_array,load_img,array_to_img

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Webpack Application</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="header">Turkish Vowels IPA Chart</h1>
+      <!-- absolute positined items -->
+      <div class="image-wrapper">
+        <img id="chart" src="chart.png" alt="" />
+        <div data-soundLabel="i" data-turkish="i" class="sound">i</div>
+        <div data-soundLabel="y" data-turkish="ü" class="sound">y</div>
+        <div data-soundLabel="e" data-turkish="e" class="sound">e</div>
+        <div data-soundLabel="œ" data-turkish="ö" class="sound">œ</div>
+        <div data-soundLabel="a" data-turkish="a" class="sound">a</div>
+        <div data-soundLabel="o" data-turkish="o" class="sound">o</div>
+        <div data-soundLabel="ɯ" data-turkish="ı" class="sound">ɯ</div>
+        <div data-soundLabel="u" data-turkish="u" class="sound">u</div>
+      </div>
+      <div id="below-chart">
+        <button id="btn">Start Listening</button>
+      </div>
+
+      <div id="recordingslist"></div>
+    </div>
+  </body>
+</html>
