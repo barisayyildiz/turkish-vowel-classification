@@ -9,7 +9,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 80px;
+  gap: 50px;
 }
 
 .image-wrapper {
@@ -89,4 +89,46 @@ body {
 
 #btn:active {
   transform: scale(0.9);
+}
+
+li {
+  list-style: none;
+}
+
+audio {
+  width: 500px;
+}
+
+audio::-webkit-media-controls-play-button {
+  border-radius: 50%;
+}
+
+audio::-webkit-media-controls-mute-button {
+  border-radius: 50%;
+}
+
+audio::-webkit-media-controls-panel {
+  background-color: #d5d5d5;
+}
+
+audio::-webkit-media-controls-current-time-display {
+  color: #000;
+  text-shadow: none;
+}
+
+audio::-webkit-media-controls-time-remaining-display {
+  color: #000;
+  text-shadow: none;
+}
+
+audio::-webkit-media-controls-timeline {
+  border-radius: 25px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+audio::-webkit-media-controls-volume-slider {
+  border-radius: 25px;
+  padding-left: 8px;
+  padding-right: 8px;
 }

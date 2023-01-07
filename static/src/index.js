@@ -88,7 +88,7 @@ const startUserMedia = (stream) => {
           });
         })
         .finally(() => {
-          // createDownloadLink();
+          createDownloadLink();
           recorder.clear();
           pending = false;
         });
@@ -108,11 +108,12 @@ const createDownloadLink = () => {
       au.src = url;
       hf.href = url;
       hf.download = new Date().toISOString() + ".wav";
-      hf.innerHTML = hf.download;
+      // hf.innerHTML = hf.download;
       li.appendChild(au);
       li.appendChild(hf);
 
       const recordingslist = document.querySelector("#recordingslist");
+      recordingslist.innerHTML = "";
       recordingslist.appendChild(li);
     });
   }
