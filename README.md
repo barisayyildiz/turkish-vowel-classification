@@ -20,7 +20,7 @@ uvicorn main:app --reload
 ### setup vm & nginx
 ```
 sudo apt-get update
-sudo apt install -y nginx
+sudo apt install -y python3-pip nginx
 sudo vim /etc/nginx/sites-enabled/fastapi_nginx
 # paste nginx config file
 sudo service nginx restart
