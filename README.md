@@ -2,7 +2,7 @@
 
 ### setup
 ```
-git clone git@github.com:barisayyildiz/grad-project-backend.git
+git clone https://github.com/barisayyildiz/grad-project-backend.git
 cd grad-project-backend
 sudo pip install virtualenv
 python3 -m venv venv
