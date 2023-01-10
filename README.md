@@ -5,7 +5,7 @@
 git clone https://github.com/barisayyildiz/grad-project-backend.git
 cd grad-project-backend
 sudo pip install virtualenv
-python3 -m venv venv
+virtualenv venv
 source ./venv/bin/activate
 mkdir audios
 mkdir specs
