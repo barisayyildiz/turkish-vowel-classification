@@ -1,5 +1,7 @@
 # grad-project-backend
 
+### [Deep Learning Model](https://colab.research.google.com/drive/1tspPmK4ZZWOSvyUBaS6asgnuHoOznA-a)
+
 ### setup
 ```
 git clone https://github.com/barisayyildiz/grad-project-backend.git
